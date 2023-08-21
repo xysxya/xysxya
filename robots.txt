@@ -14,4 +14,4 @@ Disallow: /js/
 Disallow: /css/
 Disallow: /links/
 
-sitemap: blog.yangsx.cn/sitemap.xml
+sitemap: https://blog.yangsx.cn/sitemap.xml
