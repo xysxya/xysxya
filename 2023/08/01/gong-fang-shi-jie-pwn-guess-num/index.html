@@ -17,7 +17,7 @@
 
 
     <title>攻防世界pwn-guess_num | 小哑师兄</title>
-    <link rel="icon" type="image/jpeg" href="/medias/avatar.jpg">
+    <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
     <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
@@ -33,6 +33,16 @@
 
 
 
+   <style>
+    body{
+       background-image: url(https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/background.png);
+       background-repeat:no-repeat;
+       background-size:cover;
+       background-attachment:fixed;
+    }
+</style>
+
+
 
 <body>
     <header class="navbar-fixed">
@@ -41,7 +51,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/avatar.jpg" class="logo-img" alt="LOGO">
+                    <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">小哑师兄</span>
                 </a>
@@ -108,17 +118,6 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
     <a href="/friends" class="waves-effect waves-light">
       
       <i class="fas fa-address-book" style="zoom: 0.6;"></i>
@@ -140,7 +139,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/avatar.jpg" class="logo-img circle responsive-img">
+        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg" class="logo-img circle responsive-img">
         
         <div class="logo-name">小哑师兄</div>
         <div class="logo-desc">
@@ -205,17 +204,6 @@
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
 		</a>
           
         </li>
@@ -307,10 +295,23 @@
 </header>
 
     
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-p97wgp.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -371,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    295
+                    288
                 </div>
                 
 
@@ -401,10 +402,11 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>&#x3D;&#x3D;2023-08-01&#x3D;&#x3D;</p>
-<p>通过IDA打开附件后，其中有srand随机数函数，当随机数种子变时，无论生成多少次随机数，所产生的随机数序列都是相同的。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714100108.png" alt="image.png|in1L|400"></p>
+                <p>通过IDA打开附件后，其中有srand随机数函数，当随机数种子变时，无论生成多少次随机数，所产生的随机数序列都是相同的。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714100108.png" style="zoom:50%;" /></p>
 <p>使用gets()函数进行处理，可以进行溢出，且输入和seed在栈空间中是连续的，在输入时，覆盖到seed[0] 即可</p>
-<p><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714141012.png" alt="image.png|in1L|293"><br>gets获取到的输入与seed数组在栈中是连续的，gets长度为32，因此构造payload为</p>
+<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714141012.png" style="zoom:50%;" />
+gets获取到的输入与seed数组在栈中是连续的，gets长度为32，因此构造payload为
+
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">32</span> <span class="token operator">+</span> <span class="token string">b'1000'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>其中“1000”，是设置的随机数种子，在输入过程中，“1000”是按字符形式读取的，所以在生成时该数为“0x30303031”</p>
@@ -822,7 +824,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="不能混吃等死!">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpro7.jpg" class="responsive-img" alt="不能混吃等死!">
                         
                         <span class="card-title">不能混吃等死!</span>
                     </div>
@@ -840,7 +842,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
-                            xysx
+                            小哑师兄
                             
                         </span>
                     </div>
@@ -852,16 +854,16 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/08/01/gong-fang-shi-jie-pwn-guess-num/">
+                <a href="/2023/07/26/gong-fang-shi-jie-pwn-forgot/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="攻防世界pwn-guess_num">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-qzmgjq.jpg" class="responsive-img" alt="攻防世界pwn-forgot">
                         
-                        <span class="card-title">攻防世界pwn-guess_num</span>
+                        <span class="card-title">攻防世界pwn-forgot</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -872,7 +874,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-01
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-26
                             </span>
                         <span class="publish-author">
                             
@@ -886,7 +888,6 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -940,7 +941,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 <span id="year">2023</span>
             
             <span id="year">2023</span>
-            <a href="/about" target="_blank">xysx</a>
+            <a href="/about" target="_blank">小哑师兄</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
@@ -1194,6 +1195,8 @@ $(function () {
 
     
 
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
     
 
     
