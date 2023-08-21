@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /about/
+Allow: /friends/
+Allow: /categories/
+Allow: /tags/
+
+Disallow: /assets/
+Disallow: /img/
+Disallow: /js/
+Disallow: /css/
+Disallow: /links/
+
+Sitemap: https://blog.yangsx.cn/sitemap.xml
