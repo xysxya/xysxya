@@ -4,19 +4,6 @@
   
     
     <entry>
-      <title>不能混吃等死!</title>
-      <link href="/undefined/7ed5fe30.html"/>
-      <url>/undefined/7ed5fe30.html</url>
-      
-        <content type="html"><![CDATA[<h2 id="7-20-8-20"><a href="#7-20-8-20" class="headerlink" title="7.20-8.20"></a>7.20-8.20</h2><p>陆陆续续在刷攻防世界的pwn,但整体效率不高</p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>攻防世界pwn-guess_num</title>
       <link href="/ctf-pwn/a1902526.html"/>
       <url>/ctf-pwn/a1902526.html</url>
@@ -186,6 +173,19 @@
             <tag> PWN </tag>
             
         </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>天天向上</title>
+      <link href="/undefined/7ed5fe30.html"/>
+      <url>/undefined/7ed5fe30.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="8-21"><a href="#8-21" class="headerlink" title="8.21"></a>8.21</h2><p>今天下午鼓捣了博客 尝试腾讯serverless部署博客, 访问很快, 但是需要cdn绑定到自己的域名. 复现qq的rce, 就大佬不知道咋挖出来的. 尝试给博客搞google收录, 但是google一直读不到sitemap, 其他检测网站可以正常读取. </p><h2 id="7-20-8-20"><a href="#7-20-8-20" class="headerlink" title="7.20-8.20"></a>7.20-8.20</h2><p>陆陆续续在刷攻防世界的pwn,但整体效率不高</p>]]></content>
+      
+      
       
     </entry>
     
