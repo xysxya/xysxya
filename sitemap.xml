@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.yangsx.cn/undefined/7ed5fe30.html</loc>
+    
+    <lastmod>2023-09-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/31354e41.html</loc>
+    
+    <lastmod>2023-09-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/7654e13.html</loc>
+    
+    <lastmod>2023-09-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.yangsx.cn/ctf-pwn/6d40db96.html</loc>
     
     <lastmod>2023-09-04</lastmod>
@@ -21,15 +48,6 @@
   
   <url>
     <loc>https://blog.yangsx.cn/ctf-pwn/9dff28e7.html</loc>
-    
-    <lastmod>2023-09-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yangsx.cn/undefined/7ed5fe30.html</loc>
     
     <lastmod>2023-09-04</lastmod>
     
