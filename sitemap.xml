@@ -166,7 +166,7 @@
 
   <url>
     <loc>https://blog.yangsx.cn/</loc>
-    <lastmod>2023-09-04</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -174,7 +174,7 @@
   
   <url>
     <loc>https://blog.yangsx.cn/tags/PWN/</loc>
-    <lastmod>2023-09-04</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -183,7 +183,7 @@
   
   <url>
     <loc>https://blog.yangsx.cn/categories/CTF/</loc>
-    <lastmod>2023-09-04</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
