@@ -2,7 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://blog.yangsx.cn/undefined/7ed5fe30.html</loc>
-    <lastmod>2023-09-12</lastmod>
+    <lastmod>2023-09-14</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/4ae9b482.html</loc>
+    <lastmod>2023-09-14</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.yangsx.cn/misc/5d7e6ffd.html</loc>
+    <lastmod>2023-09-14</lastmod>
   </url>
   <url>
     <loc>https://blog.yangsx.cn/ctf-pwn/eabc8e5d.html</loc>

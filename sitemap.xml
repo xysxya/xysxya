@@ -4,7 +4,25 @@
   <url>
     <loc>https://blog.yangsx.cn/undefined/7ed5fe30.html</loc>
     
-    <lastmod>2023-09-12</lastmod>
+    <lastmod>2023-09-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/4ae9b482.html</loc>
+    
+    <lastmod>2023-09-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/misc/5d7e6ffd.html</loc>
+    
+    <lastmod>2023-09-14</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -202,7 +220,7 @@
 
   <url>
     <loc>https://blog.yangsx.cn/</loc>
-    <lastmod>2023-09-12</lastmod>
+    <lastmod>2023-09-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -210,7 +228,28 @@
   
   <url>
     <loc>https://blog.yangsx.cn/tags/PWN/</loc>
-    <lastmod>2023-09-12</lastmod>
+    <lastmod>2023-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/tags/C%E5%87%BD%E6%95%B0/</loc>
+    <lastmod>2023-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/tags/Heap/</loc>
+    <lastmod>2023-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/tags/UAF/</loc>
+    <lastmod>2023-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -219,7 +258,7 @@
   
   <url>
     <loc>https://blog.yangsx.cn/categories/CTF/</loc>
-    <lastmod>2023-09-12</lastmod>
+    <lastmod>2023-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
