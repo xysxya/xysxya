@@ -2,6 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/b23875f.html</loc>
+    
+    <lastmod>2024-07-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/9dd1a73d.html</loc>
+    
+    <lastmod>2024-07-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/b23875f.html</loc>
+    
+    <lastmod>2024-07-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/308238d8.html</loc>
+    
+    <lastmod>2024-07-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.yangsx.cn/undefined/7ed5fe30.html</loc>
     
     <lastmod>2023-10-16</lastmod>
@@ -238,7 +274,7 @@
 
   <url>
     <loc>https://blog.yangsx.cn/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -246,35 +282,35 @@
   
   <url>
     <loc>https://blog.yangsx.cn/tags/PWN/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.yangsx.cn/tags/C%E5%87%BD%E6%95%B0/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.yangsx.cn/tags/Heap/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.yangsx.cn/tags/UAF/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.yangsx.cn/tags/stackoverflow/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -283,7 +319,7 @@
   
   <url>
     <loc>https://blog.yangsx.cn/categories/CTF/</loc>
-    <lastmod>2023-10-16</lastmod>
+    <lastmod>2024-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
