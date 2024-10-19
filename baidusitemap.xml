@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.yangsx.cn/sql-injection/bdc437f9.html</loc>
+    <lastmod>2024-10-19</lastmod>
+  </url>
+  <url>
     <loc>https://blog.yangsx.cn/%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/add7b52b.html</loc>
     <lastmod>2024-10-16</lastmod>
   </url>
@@ -29,20 +33,24 @@
     <lastmod>2023-10-07</lastmod>
   </url>
   <url>
+    <loc>https://blog.yangsx.cn/ctf-pwn/eabc8e5d.html</loc>
+    <lastmod>2023-10-07</lastmod>
+  </url>
+  <url>
     <loc>https://blog.yangsx.cn/ctf-pwn/127a001c.html</loc>
     <lastmod>2023-09-21</lastmod>
   </url>
   <url>
-    <loc>https://blog.yangsx.cn/ctf-pwn/4ae9b482.html</loc>
-    <lastmod>2023-09-14</lastmod>
+    <loc>https://blog.yangsx.cn/ctf-pwn/440df70f.html</loc>
+    <lastmod>2023-09-21</lastmod>
   </url>
   <url>
     <loc>https://blog.yangsx.cn/misc/5d7e6ffd.html</loc>
     <lastmod>2023-09-14</lastmod>
   </url>
   <url>
-    <loc>https://blog.yangsx.cn/ctf-pwn/eabc8e5d.html</loc>
-    <lastmod>2023-09-12</lastmod>
+    <loc>https://blog.yangsx.cn/ctf-pwn/4ae9b482.html</loc>
+    <lastmod>2023-09-14</lastmod>
   </url>
   <url>
     <loc>https://blog.yangsx.cn/ctf-pwn/3979423f.html</loc>
@@ -82,10 +90,6 @@
   </url>
   <url>
     <loc>https://blog.yangsx.cn/ctf-pwn/6d40db96.html</loc>
-    <lastmod>2023-09-04</lastmod>
-  </url>
-  <url>
-    <loc>https://blog.yangsx.cn/ctf-pwn/440df70f.html</loc>
     <lastmod>2023-09-04</lastmod>
   </url>
   <url>

